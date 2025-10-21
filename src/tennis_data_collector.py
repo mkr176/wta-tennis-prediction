@@ -315,16 +315,25 @@ class TennisDataCollector:
         """Save the collected dataset"""
         print(f"\n💾 Saving tennis dataset...")
 
+        # Get the project root directory (wta-tennis-prediction)
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
         # Convert to DataFrame and save
         matches_df = pd.DataFrame(self.matches)
-        matches_df.to_csv('../data/tennis_matches.csv', index=False)
+        data_dir = os.path.join(project_root, 'data')
+        os.makedirs(data_dir, exist_ok=True)
+        matches_file = os.path.join(data_dir, 'tennis_matches.csv')
+        matches_df.to_csv(matches_file, index=False)
 
         # Save ELO data
-        self.elo_system.save_elo_data('../models/tennis_elo_system.json')
+        models_dir = os.path.join(project_root, 'models')
+        os.makedirs(models_dir, exist_ok=True)
+        elo_file = os.path.join(models_dir, 'tennis_elo_system.json')
+        self.elo_system.save_elo_data(elo_file)
 
         print(f"✅ Dataset saved:")
-        print(f"   📊 Matches: ../data/tennis_matches.csv")
-        print(f"   🏆 ELO system: ../models/tennis_elo_system.json")
+        print(f"   📊 Matches: {matches_file}")
+        print(f"   🏆 ELO system: {elo_file}")
 
         return matches_df
 

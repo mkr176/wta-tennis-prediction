@@ -25,7 +25,11 @@ def quick_train():
 
     # Load tennis data
     try:
-        matches_df = pd.read_csv('../data/tennis_matches.csv')
+        # Get the project root directory (wta-tennis-prediction)
+        project_root = os.path.dirname(os.path.abspath(__file__))
+        data_file = os.path.join(project_root, 'data', 'tennis_matches.csv')
+
+        matches_df = pd.read_csv(data_file)
         print(f"✅ Loaded {len(matches_df):,} matches")
     except:
         print("❌ No tennis data found")

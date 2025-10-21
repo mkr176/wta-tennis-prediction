@@ -149,7 +149,12 @@ class RealATPModel:
 
         # Load real WTA data
         print("Loading real WTA dataset...")
-        matches_df = pd.read_csv('../data/real_wta_matches.csv')
+
+        # Get the project root directory (wta-tennis-prediction)
+        project_root = os.path.dirname(os.path.abspath(__file__))
+        data_file = os.path.join(project_root, 'data', 'real_wta_matches.csv')
+
+        matches_df = pd.read_csv(data_file)
         print(f"✅ Loaded {len(matches_df):,} real WTA matches")
         print(f"   🎾 Players: {len(set(matches_df['winner']) | set(matches_df['loser'])):,}")
         print(f"   📅 Date range: {matches_df['date'].min()} to {matches_df['date'].max()}")

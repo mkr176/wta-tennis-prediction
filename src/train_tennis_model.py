@@ -161,8 +161,13 @@ class Tennis85PercentModel:
 
         # Collect or load tennis data
         print("Loading tennis dataset...")
+
+        # Get the project root directory (wta-tennis-prediction)
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        data_file = os.path.join(project_root, 'data', 'tennis_matches.csv')
+
         try:
-            matches_df = pd.read_csv('../data/tennis_matches.csv')
+            matches_df = pd.read_csv(data_file)
             print(f"Loaded {len(matches_df):,} matches")
         except:
             print("Generating tennis dataset...")
@@ -294,11 +299,17 @@ class Tennis85PercentModel:
 
         # Save models
         print(f"\n💾 Saving tennis models...")
-        joblib.dump(self.best_model, '../models/tennis_85_percent_model.pkl')
-        joblib.dump(self.feature_columns, '../models/tennis_features.pkl')
-        joblib.dump(self.elo_system, '../models/tennis_elo_complete.pkl')
 
-        print(f"✅ Tennis models saved!")
+        # Get the project root directory (wta-tennis-prediction)
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        models_dir = os.path.join(project_root, 'models')
+        os.makedirs(models_dir, exist_ok=True)
+
+        joblib.dump(self.best_model, os.path.join(models_dir, 'tennis_85_percent_model.pkl'))
+        joblib.dump(self.feature_columns, os.path.join(models_dir, 'tennis_features.pkl'))
+        joblib.dump(self.elo_system, os.path.join(models_dir, 'tennis_elo_complete.pkl'))
+
+        print(f"✅ Tennis models saved to {models_dir}!")
 
         return best_accuracy
 

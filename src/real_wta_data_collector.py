@@ -366,22 +366,29 @@ class RealWTADataCollector:
         """Save real WTA data"""
         print(f"\n💾 SAVING REAL WTA DATA")
 
-        # Save to data directory
-        os.makedirs('../data', exist_ok=True)
+        # Get the project root directory (wta-tennis-prediction)
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+        # Save to data directory within the project
+        data_dir = os.path.join(project_root, 'data')
+        os.makedirs(data_dir, exist_ok=True)
 
         # Save main dataset
-        matches_df.to_csv('../data/real_wta_matches.csv', index=False)
-        print(f"✅ Real WTA matches: ../data/real_wta_matches.csv")
+        matches_file = os.path.join(data_dir, 'real_wta_matches.csv')
+        matches_df.to_csv(matches_file, index=False)
+        print(f"✅ Real WTA matches: {matches_file}")
 
         # Create ELO system with real data
         print("🏆 Building ELO system from real WTA data...")
         self.elo_system.build_from_match_data(matches_df)
 
         # Save ELO system
-        os.makedirs('../models', exist_ok=True)
+        models_dir = os.path.join(project_root, 'models')
+        os.makedirs(models_dir, exist_ok=True)
         import joblib
-        joblib.dump(self.elo_system, '../models/real_wta_elo_system.pkl')
-        print(f"✅ Real WTA ELO system: ../models/real_wta_elo_system.pkl")
+        elo_file = os.path.join(models_dir, 'real_wta_elo_system.pkl')
+        joblib.dump(self.elo_system, elo_file)
+        print(f"✅ Real WTA ELO system: {elo_file}")
 
         # Show top players from real data
         print(f"\n🥇 TOP 10 REAL WTA PLAYERS BY ELO:")
