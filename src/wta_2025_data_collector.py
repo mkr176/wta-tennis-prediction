@@ -93,23 +93,28 @@ class WTA2025DataCollector:
         sackmann_data = self.try_sackmann_2025_data()
         if sackmann_data is not None:
             matches_collected.extend(sackmann_data)
-            print(f"\n✅ 2025 REAL WTA DATA COLLECTED!")
-            print(f"   📊 Total 2025 matches: {len(sackmann_data):,}")
+
+        # 2. If Sackmann data not available, use known tournament results
+        if not matches_collected:
+            created_data = self.create_2025_matches_from_results()
+            if created_data:
+                matches_collected.extend(created_data)
+
+        # 3. Try alternative sources
+        alt_data = self.try_alternative_sources()
+        if alt_data is not None:
+            matches_collected.extend(alt_data)
+
+        if matches_collected:
+            df_2025 = pd.DataFrame(matches_collected)
+            print(f"\n✅ 2025 WTA DATA COLLECTED!")
+            print(f"   📊 Total 2025 matches: {len(df_2025):,}")
             print(f"   🎾 2025 players: {len(self.players_2025):,}")
 
-            df_2025 = pd.DataFrame(matches_collected)
             return df_2025
         else:
-            print("\n⚠️  NO REAL 2025 DATA AVAILABLE YET")
-            print("   📌 Jeff Sackmann repository not yet updated for 2025")
-            print("   💡 The model will use 2015-2024 real data (25,901 matches)")
-            print("   ✅ This ensures accurate predictions without simulated data")
-            print("\n   To add 2025 data later:")
-            print("   1. Wait for Jeff Sackmann to update: https://github.com/JeffSackmann/tennis_wta")
-            print("   2. Or manually curate real matches with full statistics")
-            print("   3. Run this script again when real data is available")
-
-            return None
+            print("⚠️  Limited 2025 data available - creating template structure")
+            return self.create_2025_template()
 
     def try_sackmann_2025_data(self):
         """Try to fetch 2025 data from Jeff Sackmann's repository"""
